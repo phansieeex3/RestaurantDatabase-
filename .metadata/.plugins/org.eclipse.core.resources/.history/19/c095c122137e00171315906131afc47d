@@ -17,7 +17,7 @@ public class connection
 		try{
 		
 			String url = "jdbc:sqlserver://localhost\\SQLEXPRESS:1433;databaseName=AdventureWorks2012;integratedSecurity=true";
-			Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
+			//Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
       	  	Connection conn = DriverManager.getConnection(url);
             String sql = "select FirstName, LastName from Person.person";
             Statement statement = conn.createStatement();
