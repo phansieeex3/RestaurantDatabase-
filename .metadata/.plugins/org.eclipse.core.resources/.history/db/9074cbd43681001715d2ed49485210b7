@@ -1,0 +1,180 @@
+package gui;
+
+import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Dimension;
+
+import javax.swing.Box;
+import javax.swing.BoxLayout;
+import javax.swing.JButton;
+import javax.swing.JComponent;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+
+public class UI {
+
+	/** An initial size for the frame. */
+    private static final Dimension INITIAL_SIZE = new Dimension(500, 500);
+
+    /** A minimum size for the frame. */
+    private static final Dimension MIN_SIZE = new Dimension(150, 300);
+    
+    /** The default width for many components. */
+    private static final int DEFAULT_WIDTH = 80;
+    
+    /** The default height for many components. */
+    private static final int DEFAULT_HEIGHT = 60;
+    
+    /** The default space between components. */
+    private static final int PADDING = 5;
+    
+    /**are we signed in? */
+    private boolean signedin;
+    
+    /**dark blue */
+    private Color darkBlue; 
+    /**light blue */
+    private Color lightBlue;
+    
+    
+    
+    // Instance fields
+    
+    /** The top level Window for this GUI. */
+    private final JFrame myFrame;
+
+    /**
+     * Initialize the instance fields.
+     */
+    public UI() {
+        myFrame = new JFrame("Kevin & Phansa's Restaurant");
+        signedin = false;
+        darkBlue = new Color(98, 94, 216);
+        lightBlue = new Color(165, 163, 242);
+    }
+    
+    public static void main(String[] args){
+    	UI frame = new UI();
+    	frame.start();
+    }
+    
+    /**
+     * Sets up and displays the GUI.
+     */
+    public void start() {
+        
+        setupEast();
+        setupCenter();
+        
+        myFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        myFrame.setSize(INITIAL_SIZE);
+        myFrame.setMinimumSize(MIN_SIZE);
+        myFrame.setLocationRelativeTo(null);
+        myFrame.setVisible(true);
+    }
+
+    /**
+     * Sets up the JPanel for the EAST region.
+     */
+    private void setupEast() {
+        
+        final JPanel eastPanel = new JPanel();
+        final BoxLayout b = new BoxLayout(eastPanel, BoxLayout.PAGE_AXIS);
+        eastPanel.setLayout(b);
+        eastPanel.setBackground(Color.BLACK);
+
+        //setting up sign in button.
+        final JPanel innerPanel1 = new JPanel();
+        innerPanel1.setBackground(darkBlue);
+        if(signedin)
+        innerPanel1.add(new JButton("Sign Out"));
+        else
+        	innerPanel1.add(new JButton("Sign In")); 
+
+        final JPanel innerPanel2 = new JPanel();
+        innerPanel2.setBackground(darkBlue);
+        innerPanel2.add(new JButton("Menu"));
+        
+        
+        final JPanel innerPanel3 = new JPanel();
+        innerPanel3.setBackground(darkBlue);
+        innerPanel3.add(new JButton("Past Order"));
+        
+        final JPanel innerPanel4 = new JPanel();
+        innerPanel4.setBackground(darkBlue);
+        innerPanel4.add(new JButton("Payment"));
+        
+        eastPanel.add(innerPanel1);
+        
+        /* Methods of the Box class can be used to create several types
+         * of invisible components in a GUI that can be used as 'spacers'.
+         * One type of invisible component is a 'strut' which can be created
+         * with a horizontal or vertical orientation.
+         */
+        eastPanel.add(Box.createVerticalStrut(PADDING));
+        
+        eastPanel.add(innerPanel2);
+        eastPanel.add(Box.createVerticalStrut(PADDING));
+        eastPanel.add(innerPanel3);
+        eastPanel.add(Box.createVerticalStrut(PADDING));
+        eastPanel.add(innerPanel4);
+        eastPanel.add(Box.createVerticalStrut(PADDING));
+
+
+        
+        myFrame.add(eastPanel, BorderLayout.EAST);
+    }
+
+    /**
+     * Sets up the JPanel for displaying information. 
+     */
+    private void setupCenter() {
+        
+        final JPanel centerPanel = new JPanel();
+        centerPanel.setBackground(lightBlue);
+        
+        
+        
+        myFrame.add(centerPanel, BorderLayout.CENTER);
+    }
+
+    /**
+     * Sets up the JPanel for the SOUTH region.
+     */
+    private void setupSouth() {
+        
+        final JComponent southPanel = new JPanel();
+        southPanel.setBackground(Color.BLUE);
+
+        final JPanel innerPanel1 = new JPanel();
+        innerPanel1.setBackground(Color.ORANGE);
+        innerPanel1.setPreferredSize(new Dimension(DEFAULT_WIDTH, DEFAULT_HEIGHT));
+        innerPanel1.add(new JLabel("Good"));
+
+        final JPanel innerPanel2 = new JPanel();
+        innerPanel2.setBackground(Color.RED);
+        innerPanel2.setPreferredSize(new Dimension(DEFAULT_WIDTH, DEFAULT_HEIGHT));
+        innerPanel2.add(new JLabel("Luck!"));
+
+        
+        final Box southBox = new Box(BoxLayout.LINE_AXIS);
+        southBox.add(innerPanel1);
+        //southBox.add(Box.createHorizontalStrut(PADDING));
+        southBox.add(innerPanel2);
+        southPanel.add(southBox);
+        
+        
+        /* Alternatively, you could comment out the code above related use of a Box and use
+         * the code below instead which adds the inner panels directly to the southPanel.
+         * This will get a slightly different result in that the southPanel will add a small
+         * space between the inner panels.
+         */
+        //southPanel.add(innerPanel1);
+        //southPanel.add(innerPanel2);
+
+        
+        myFrame.add(southPanel, BorderLayout.SOUTH);
+    }
+
+}
