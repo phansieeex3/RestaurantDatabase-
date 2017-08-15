@@ -108,6 +108,8 @@ public class UI extends JFrame {
         	
         	signin(myFrame);
         	signedin = true;
+        	//myFrame.repaint();
+        	//myFrame.setVisible(true);
         }
        
         
@@ -119,11 +121,6 @@ public class UI extends JFrame {
         myFrame.setVisible(true);
     }
 
-    /**
-     * Grabs the login information from user.
-     * @param frame is a jframe of our current frame.
-     * @return boolean value 
-     */
     public boolean signin(JFrame frame){
     	Hashtable<String, String> logininformation = new Hashtable<String, String>();
     	boolean val = false;
@@ -246,11 +243,6 @@ public class UI extends JFrame {
         myFrame.setVisible(true);
     }
 
-    /**
-     * This class listens to the menu button.
-     * @author Phansa Chaonpoj
-     *
-     */
     private class ActionListenerMenu implements ActionListener{
 
 		@Override
@@ -275,11 +267,6 @@ public class UI extends JFrame {
     	
     }
     
-    /**
-     * This class listens to the past order button.
-     * @author Phansa Chaonpoj
-     *
-     */
     private class ActionListenerPastOrder implements ActionListener{
 
 		@Override
@@ -309,11 +296,6 @@ public class UI extends JFrame {
     	
     }
 
-    /**
-     * This class listens to the payment button.
-     * @author Phansa Chaonpoj
-     *
-     */
     private class ActionListenerPayment implements ActionListener{
 
   		@Override
@@ -322,14 +304,14 @@ public class UI extends JFrame {
   			//write query for this 
   			//query = "Select * from kevintn.FoodMenu";
   			centerP.removeAll();
-  			String payment = "select kp.PaymentID, kp.PaymentType, kp.IsPaid "
+  			String payment = "select * "
   					+ "from kevintn.Payment as kp "
   					+ "inner join "
   					+ "kevintn.SalesOrderCustomer as ko "
   					+ "on  kp.CustomerID = ko.CustomerID "
   					+ "inner join "
 					+ "kevintn.Customers as kc "
-					+ "on kc.CustomerID = ko.CustomerID "
+					+ "on kc.CustomerID = ks.CustomerID "
 					+ "where kc.EmailAdress like '%" + email + "%'";
   			
   			

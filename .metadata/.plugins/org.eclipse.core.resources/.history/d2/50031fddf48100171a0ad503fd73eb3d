@@ -102,14 +102,12 @@ public class UI extends JFrame {
         myFrame.add(centerP, BorderLayout.CENTER);
         setupEast();
         
-        
         if(!signedin) //if new user. display joptionpane to sign in
         {
         	
         	signin(myFrame);
         	signedin = true;
         }
-       
         
         
         myFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -119,11 +117,6 @@ public class UI extends JFrame {
         myFrame.setVisible(true);
     }
 
-    /**
-     * Grabs the login information from user.
-     * @param frame is a jframe of our current frame.
-     * @return boolean value 
-     */
     public boolean signin(JFrame frame){
     	Hashtable<String, String> logininformation = new Hashtable<String, String>();
     	boolean val = false;
@@ -174,10 +167,7 @@ public class UI extends JFrame {
         
         final JPanel innerPanel4 = new JPanel();
         innerPanel4.setBackground(darkBlue);
-        JButton payment = new JButton("Payment");
-        payment.addActionListener(new ActionListenerPayment());
-        innerPanel4.add(payment);
-        
+        innerPanel4.add(new JButton("Payment"));
         
         //setting up sign in button.
         final JPanel innerPanel1 = new JPanel();
@@ -194,15 +184,12 @@ public class UI extends JFrame {
         		  	System.out.println(signedin);
         		  	if(signedin) //if already signed in
         		  	{
-        		  		centerP.removeAll();
-        		  	 	myFrame.repaint();
-        		  	 	myFrame.setVisible(true);
         		  		signedin = false;
         		  		myFrame = new UI();
-        		  		((UI) myFrame).start();
-        	
-
-        		  	 	
+        		  		//signInOut.setText("Sign In");
+        		  	 	myFrame.repaint();
+        		  	 	centerP.removeAll();
+        		  	 	signin(myFrame);
         		  	}
         		  	
         		  } 
@@ -246,11 +233,6 @@ public class UI extends JFrame {
         myFrame.setVisible(true);
     }
 
-    /**
-     * This class listens to the menu button.
-     * @author Phansa Chaonpoj
-     *
-     */
     private class ActionListenerMenu implements ActionListener{
 
 		@Override
@@ -275,11 +257,6 @@ public class UI extends JFrame {
     	
     }
     
-    /**
-     * This class listens to the past order button.
-     * @author Phansa Chaonpoj
-     *
-     */
     private class ActionListenerPastOrder implements ActionListener{
 
 		@Override
@@ -309,36 +286,4 @@ public class UI extends JFrame {
     	
     }
 
-    /**
-     * This class listens to the payment button.
-     * @author Phansa Chaonpoj
-     *
-     */
-    private class ActionListenerPayment implements ActionListener{
-
-  		@Override
-  		public void actionPerformed(ActionEvent e) {
-  			// TODO Auto-generated method stub
-  			//write query for this 
-  			//query = "Select * from kevintn.FoodMenu";
-  			centerP.removeAll();
-  			String payment = "select kp.PaymentID, kp.PaymentType, kp.IsPaid "
-  					+ "from kevintn.Payment as kp "
-  					+ "inner join "
-  					+ "kevintn.SalesOrderCustomer as ko "
-  					+ "on  kp.CustomerID = ko.CustomerID "
-  					+ "inner join "
-					+ "kevintn.Customers as kc "
-					+ "on kc.CustomerID = ko.CustomerID "
-					+ "where kc.EmailAdress like '%" + email + "%'";
-  			
-  			
-  			System.out.println("paymentClicked");
-  			JTable table = SqlConnection.sendMeQuery(payment);
-  			setupCenter(table);
-  			myFrame.setVisible(true);
-  			
-  		}
-      	
-      }
 }
