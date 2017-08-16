@@ -200,7 +200,10 @@ public class UI extends JFrame {
         		  	 	myFrame.setVisible(true);
         		  		signedin = false;
         		  		myFrame = new UI();
-        		  		((UI) myFrame).start();     		  	 	
+        		  		((UI) myFrame).start();
+        	
+
+        		  	 	
         		  	}
         		  	
         		  } 
@@ -246,7 +249,7 @@ public class UI extends JFrame {
     
     /**set up for menu. */
     private void setupMenu(JTable table) {
-    	
+    	centerP.removeAll();
     	JScrollPane scrollPane = new JScrollPane(table);
         centerP.add(scrollPane);
         
@@ -258,30 +261,14 @@ public class UI extends JFrame {
         final JComboBox<String> cb = new JComboBox<String>(choices);
         cb.setVisible(true);
         centerP.add(cb);
-       
+        
         JButton search = new JButton("Search");
         search.addActionListener(new ActionListener() { 
       	  public void actionPerformed(ActionEvent e) { 
       		  //if clicked grab the choice and send query. 
-      		String ct = String.valueOf(cb.getSelectedItem());
-      		System.out.println("search clicked");
-      		
-      		String mq = "select FoodName as FoodName, FoodDescription as FoodDescription, FoodPrice as FoodPrice, CategoryName as Category "
-					+ "from kevintn.FoodMenu as kf "
-					+ "inner join "
-					+ "kevintn.Category as kc "
-					+ "on  kf.CategoryID = kc.CategoryID "
-					+ "where CategoryName like '%"+ ct+ "'";
-			
-			JTable table = SqlConnection.sendMeQuery(mq);
-			centerP.removeAll();
-			centerP.add(table);
-			JButton back = new JButton("Back to Search");
-	        back.addActionListener(new ActionListenerMenu());
-	        centerP.add(back);
-			myFrame.repaint();
-			myFrame.setVisible(true);
-      		
+      		  String ct = cb.toString();
+      		  System.out.println("search clicked");
+      		  System.out.println(ct);
   		  		
   		  } 
   		} );   

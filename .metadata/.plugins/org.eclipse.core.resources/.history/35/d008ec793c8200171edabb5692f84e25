@@ -200,7 +200,10 @@ public class UI extends JFrame {
         		  	 	myFrame.setVisible(true);
         		  		signedin = false;
         		  		myFrame = new UI();
-        		  		((UI) myFrame).start();     		  	 	
+        		  		((UI) myFrame).start();
+        	
+
+        		  	 	
         		  	}
         		  	
         		  } 
@@ -258,7 +261,10 @@ public class UI extends JFrame {
         final JComboBox<String> cb = new JComboBox<String>(choices);
         cb.setVisible(true);
         centerP.add(cb);
-       
+        
+        
+        
+        
         JButton search = new JButton("Search");
         search.addActionListener(new ActionListener() { 
       	  public void actionPerformed(ActionEvent e) { 

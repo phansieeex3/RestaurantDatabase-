@@ -200,7 +200,10 @@ public class UI extends JFrame {
         		  	 	myFrame.setVisible(true);
         		  		signedin = false;
         		  		myFrame = new UI();
-        		  		((UI) myFrame).start();     		  	 	
+        		  		((UI) myFrame).start();
+        	
+
+        		  	 	
         		  	}
         		  	
         		  } 
@@ -258,7 +261,7 @@ public class UI extends JFrame {
         final JComboBox<String> cb = new JComboBox<String>(choices);
         cb.setVisible(true);
         centerP.add(cb);
-       
+        
         JButton search = new JButton("Search");
         search.addActionListener(new ActionListener() { 
       	  public void actionPerformed(ActionEvent e) { 
@@ -266,7 +269,7 @@ public class UI extends JFrame {
       		String ct = String.valueOf(cb.getSelectedItem());
       		System.out.println("search clicked");
       		
-      		String mq = "select FoodName as FoodName, FoodDescription as FoodDescription, FoodPrice as FoodPrice, CategoryName as Category "
+      		String mq = "select FoodName, FoodDescription, FoodPrice, CategoryName "
 					+ "from kevintn.FoodMenu as kf "
 					+ "inner join "
 					+ "kevintn.Category as kc "
@@ -276,9 +279,6 @@ public class UI extends JFrame {
 			JTable table = SqlConnection.sendMeQuery(mq);
 			centerP.removeAll();
 			centerP.add(table);
-			JButton back = new JButton("Back to Search");
-	        back.addActionListener(new ActionListenerMenu());
-	        centerP.add(back);
 			myFrame.repaint();
 			myFrame.setVisible(true);
       		
