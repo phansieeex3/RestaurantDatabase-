@@ -452,6 +452,7 @@ public class UI extends JFrame {
 			// TODO Auto-generated method stub
 			centerP.removeAll();
 			JButton order = new JButton("Order");
+			JButton orderagain = new JButton("Order again!");
 			
 			JLabel food = new JLabel("Pick your foodID!");
 			centerP.add(food);
@@ -459,22 +460,14 @@ public class UI extends JFrame {
 			final JComboBox<String> cb = new JComboBox<String>(foodid);
 	        cb.setVisible(true);
 	        centerP.add(cb);
-			centerP.add(order); //after click give feedback. send query...
-			order.addActionListener(new ActionListener() { 
-	        	  public void actionPerformed(ActionEvent e) { 
-	        		  	System.out.println("order clicked");
-	        		  	
-	        		  	String id = String.valueOf(cb.getSelectedItem());
-	        		  	String q = "";
-	        		  	
-	        		  } 
-	        		} );       
+			centerP.add(order);
+			centerP.add(orderagain);
 			
 	        
-			String foodmenu = "select * "
+			String profile = "select * "
 					+ "from kevintn.FoodMenu";
 			
-			JTable table = SqlConnection.sendMeQuery(foodmenu);
+			JTable table = SqlConnection.sendMeQuery(profile);
 			setupCenter(table);
 			myFrame.repaint();
 			myFrame.setVisible(true);
