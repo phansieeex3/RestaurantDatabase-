@@ -480,12 +480,12 @@ public class UI extends JFrame {
 	        		  	System.out.println(cusid.getText());
 	        		  	String id = String.valueOf(cb.getSelectedItem());
 	        		  	//order id, customerid, subtotal, date, payment id
-	        		  	q = "insert into SalesOrderCustomer values("
+	        		  	q = "insert into SalesOrderCustomer values ("
 	        		  			+ cusid.getText() + "," + cusid.getText() + ", "
 	        		  					+ "12"+ ", '08/21/17', " + cusid.getText() + ")"; 
 	        		  	
 	        		  	//order id, foodid, food price, quantity
-	        		   q2 = "insert into SalesOrderDetail values("
+	        		   q2 = "insert into SalesOrderDetail values ("
 	        		  			+ cusid.getText() + ", " + id + ", " + "4"
 	        		  					+ ", 1)";
 	        		  	
