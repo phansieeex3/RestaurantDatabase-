@@ -14,6 +14,7 @@ import java.awt.Dimension;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.sql.Connection;
 import java.util.Hashtable;
 
 import javax.swing.Box;
@@ -30,9 +31,15 @@ import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 
+
 import service.SqlConnection;
 
 public class UI extends JFrame {
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 
 	/** An initial size for the frame. */
     private static final Dimension INITIAL_SIZE = new Dimension(800, 500);
@@ -43,11 +50,7 @@ public class UI extends JFrame {
     /** Color of padding */
     private Color padding;
     
-    /** The default width for many components. */
-    private static final int DEFAULT_WIDTH = 80;
-    
-    /** The default height for many components. */
-    private static final int DEFAULT_HEIGHT = 60;
+ 
     
     /** The default space between components. */
     private static final int PADDING = 5;
@@ -70,6 +73,9 @@ public class UI extends JFrame {
     public JPanel centerPanel;
     
     
+    public static  String q ;
+    
+    public static String q2; 
     /**customer email  */
     public String email;
    
@@ -441,10 +447,13 @@ public class UI extends JFrame {
     	
     }
     
+    
     /**
      * The order information.
      */
     private class ActionListenerOrder implements ActionListener {
+
+        private  Connection conn;
 
     	//once clicked list the user's information.
 		@Override
@@ -452,8 +461,13 @@ public class UI extends JFrame {
 			// TODO Auto-generated method stub
 			centerP.removeAll();
 			JButton order = new JButton("Order");
+			JTextField cusid = new JTextField("ID");
+			
+			JLabel hint = new JLabel("Enter your ID");
 			
 			JLabel food = new JLabel("Pick your foodID!");
+			centerP.add(hint);
+			centerP.add(cusid);
 			centerP.add(food);
 			String[] foodid = {"1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12"};
 			final JComboBox<String> cb = new JComboBox<String>(foodid);
@@ -463,16 +477,33 @@ public class UI extends JFrame {
 			order.addActionListener(new ActionListener() { 
 	        	  public void actionPerformed(ActionEvent e) { 
 	        		  	System.out.println("order clicked");
-	        		  	
+	        		  	System.out.println(cusid.getText());
 	        		  	String id = String.valueOf(cb.getSelectedItem());
-	        		  	String q = "";
+	        		  	//order id, customerid, subtotal, date, payment id
+	        		  	q = "insert into SalesOrderCustomer values ("
+	        		  			+ cusid.getText() + "," + cusid.getText() + ", "
+	        		  					+ "12.78"+ ", " + cusid.getText() + ")"; 
+	        		  	
+	        		  	//order id, foodid, food price, quantity
+	        		   q2 = "insert into SalesOrderDetail values ("
+	        		  			+ cusid.getText() + ", " + id + ", " + "4.00"
+	        		  					+ ", 1)";
+	        		  	
+	        		   System.out.println(q);
+	        		   System.out.println(q2);
+	        		  SqlConnection.updateTable(q);
+	        		  //SqlConnection.updateTable(q2);
+	        		  	
 	        		  	
 	        		  } 
 	        		} );       
 			
 	        
-			String foodmenu = "select * "
-					+ "from kevintn.FoodMenu";
+			String foodmenu = "select FoodID, FoodName, FoodDescription, FoodPrice, CategoryName "
+					+ "from kevintn.FoodMenu as kf "
+					+ "inner join "
+					+ "kevintn.Category as kc "
+					+ "on  kf.CategoryID = kc.CategoryID";
 			
 			JTable table = SqlConnection.sendMeQuery(foodmenu);
 			setupCenter(table);

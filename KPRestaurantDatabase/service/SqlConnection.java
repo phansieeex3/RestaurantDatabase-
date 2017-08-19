@@ -74,6 +74,27 @@ public class SqlConnection {
         
         return table;
 	}
+	
+	public static void updateTable(String q){
+		
+		
+		Vector columnNames	= new Vector();
+		Vector data = new Vector();
+		JPanel panel = new JPanel();   
+		Properties connectionProps = new Properties();
+		connectionProps.put("user", "kevintn");
+		connectionProps.put("password", "witGars");
+		try {
+			conn = DriverManager.getConnection("jdbc:mysql://cssgate.insttech.washington.edu/Kevintn", connectionProps);
+            Statement statement = conn.createStatement();
+            statement.executeUpdate(q);
+            
+            conn.close();
+            statement.close();
+        } catch (Exception e) {
+            System.out.println(e);
+        }
+	}
 }
 
 
