@@ -31,6 +31,7 @@ import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 
+import com.mysql.jdbc.Statement;
 
 import service.SqlConnection;
 
@@ -368,7 +369,7 @@ public class UI extends JFrame {
 			// TODO Auto-generated method stub
 			//write query for this 
 			centerP.removeAll();
-			String q = "Select ks.OrderID, kf.FoodName, ks.subTotal, ks.Date "
+			String q = "Select distinct ks.OrderID, kf.FoodName, ks.subTotal, ks.Date "
 					+ "from kevintn.SalesOrderCustomer as ks "
 					+ "inner join "
 					+ "kevintn.SalesOrderDetail as kd "
@@ -378,7 +379,7 @@ public class UI extends JFrame {
 					+ "inner join "
 					+ "kevintn.Customers as kc "
 					+ "on kc.CustomerID = ks.CustomerID "
-					+ "where kc.EmailAdress like '%" + email + "%'";
+					+ "where kc.EmailAdress = '" + email + "'";
 			
 			System.out.println("past order clicked");
 			JTable table = SqlConnection.sendMeQuery(q);
@@ -462,12 +463,14 @@ public class UI extends JFrame {
 			centerP.removeAll();
 			JButton order = new JButton("Order");
 			JTextField cusid = new JTextField("ID");
-			
+			JTextField cus2id = new JTextField("OrderID");
 			JLabel hint = new JLabel("Enter your ID");
-			
+			JLabel hint2 = new JLabel("Enter your OrderID");
 			JLabel food = new JLabel("Pick your foodID!");
 			centerP.add(hint);
 			centerP.add(cusid);
+			centerP.add(hint2);
+			centerP.add(cus2id);
 			centerP.add(food);
 			String[] foodid = {"1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12"};
 			final JComboBox<String> cb = new JComboBox<String>(foodid);
@@ -480,20 +483,19 @@ public class UI extends JFrame {
 	        		  	System.out.println(cusid.getText());
 	        		  	String id = String.valueOf(cb.getSelectedItem());
 	        		  	//order id, customerid, subtotal, date, payment id
+	        		  	//insert into SalesOrderCustomer values (1,1,16.74,GEtDate(),1)
 	        		  	q = "insert into SalesOrderCustomer values("
-	        		  			+ cusid.getText() + "," + cusid.getText() + ", "
-	        		  					+ "12"+ ", '08/21/17', " + cusid.getText() + ")"; 
+	        		  			+ cus2id.getText() + "," + cusid.getText() + ", "
+	        		  					+ "12"+ ", date," + cusid.getText() + ")"; 
 	        		  	
 	        		  	//order id, foodid, food price, quantity
 	        		   q2 = "insert into SalesOrderDetail values("
-	        		  			+ cusid.getText() + ", " + id + ", " + "4"
+	        		  			+ cus2id.getText() + ", " + id + ", " + "4"
 	        		  					+ ", 1)";
-	        		  	
-	        		   System.out.println(q);
-	        		   System.out.println(q2);
+	        	
 	        		  SqlConnection.updateTable(q);
 	        		  SqlConnection.updateTable(q2);
-	        		  	
+	        		  System.out.println("YoUr iTem hAs bEen oRder");
 	        		  	
 	        		  } 
 	        		} );       

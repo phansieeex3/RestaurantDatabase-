@@ -26,7 +26,7 @@ javax.swing.table.TableColumn;
 
 public class SqlConnection {
 	
-    private static Connection conn;
+    public static Connection conn;
 	
 	
 	public static JTable sendMeQuery(String q)
@@ -85,7 +85,7 @@ public class SqlConnection {
 		connectionProps.put("user", "kevintn");
 		connectionProps.put("password", "witGars");
 		try {
-			conn = DriverManager.getConnection("jdbc:mysql://cssgate.insttech.washington.edu/Kevintn", connectionProps);
+			conn = DriverManager.getConnection("jdbc:mysql://cssgate.insttech.washington.edu/kevintn", connectionProps);
             Statement statement = conn.createStatement();
             statement.executeUpdate(q);
             
