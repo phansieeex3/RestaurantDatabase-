@@ -1,4 +1,5 @@
 package service;
+import java.util.Properties;
 /**
  * @author Phansa Chaonpoj
  * @author Kevin Nguyen 
@@ -9,12 +10,13 @@ package service;
  *  database connection.
  * 
  */
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.SQLException;
-import java.util.Properties;
 import
 java.sql.*;
+import java.sql.Date;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.ZoneId;
 import
 java.util.*;
 import
@@ -85,12 +87,51 @@ public class SqlConnection {
 		connectionProps.put("user", "kevintn");
 		connectionProps.put("password", "witGars");
 		try {
+			
+			
 			conn = DriverManager.getConnection("jdbc:mysql://cssgate.insttech.washington.edu/kevintn", connectionProps);
-            Statement statement = conn.createStatement();
-            statement.executeUpdate(q);
-            
+
+			/*
+			Statement statement = conn.createStatement();
+                       statement.executeUpdate(q);
+                       statement.close();
+                       */
+			java.util.Date utilDate = new java.util.Date();
+            java.sql.Date sqlDate2 = new java.sql.Date(utilDate.getTime());
+		  	
+			PreparedStatement p = conn.prepareStatement(q);
+			p.setDate(1,sqlDate2 );
+			p.execute();
+			p.close();
             conn.close();
-            statement.close();
+            
+        } catch (Exception e) {
+            System.out.println(e);
+        }
+	}
+	
+public static void updateTable2(String q){
+		
+		
+		Vector columnNames	= new Vector();
+		Vector data = new Vector();
+		JPanel panel = new JPanel();   
+		Properties connectionProps = new Properties();
+		connectionProps.put("user", "kevintn");
+		connectionProps.put("password", "witGars");
+		try {
+			
+			
+			conn = DriverManager.getConnection("jdbc:mysql://cssgate.insttech.washington.edu/kevintn", connectionProps);
+
+			
+			Statement statement = conn.createStatement();
+                       statement.executeUpdate(q);
+                       statement.close();
+                       
+			
+            conn.close();
+            
         } catch (Exception e) {
             System.out.println(e);
         }

@@ -1,0 +1,534 @@
+package gui;
+/**
+ * @author Phansa Chaonpoj
+ * @author Kevin Nguyen 
+ * @author Allan Fowler --skeleton code for layout. 
+ * 
+ *  @version 1.0 
+ *  UI.java sets up the user interface of the database. 
+ * 
+ */
+import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.GridLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.sql.Connection;
+import java.sql.Date;
+import java.util.Calendar;
+import java.util.Hashtable;
+
+import javax.swing.Box;
+import javax.swing.BoxLayout;
+import javax.swing.JButton;
+import javax.swing.JComboBox;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JPasswordField;
+import javax.swing.JScrollPane;
+import javax.swing.JTable;
+import javax.swing.JTextField;
+import javax.swing.SwingConstants;
+
+
+import service.SqlConnection;
+
+public class UI extends JFrame {
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
+	/** An initial size for the frame. */
+    private static final Dimension INITIAL_SIZE = new Dimension(800, 500);
+
+    /** A minimum size for the frame. */
+    private static final Dimension MIN_SIZE = new Dimension(150, 300);
+    
+    /** Color of padding */
+    private Color padding;
+    
+ 
+    
+    /** The default space between components. */
+    private static final int PADDING = 5;
+    
+    /**are we signed in? */
+    private boolean signedin;
+    
+    /**dark blue */
+    private Color darkBlue; 
+    /**light blue */
+    private Color lightBlue;
+    
+    /**current query being executed. */
+    public String query;
+    
+    /** My center panel.*/
+    public JPanel centerP; 
+    
+    /**Center Panel */
+    public JPanel centerPanel;
+    
+    
+    public static  String q ;
+    
+    public static String q2; 
+    /**customer email  */
+    public String email;
+   
+    
+    
+    // Instance fields
+    
+    /** The top level Window for this GUI. */
+    private JFrame myFrame;
+
+    /**
+     * Initialize the instance fields.
+     */
+    public UI() {
+        myFrame = new JFrame("Kevin & Phansa's Restaurant");
+        signedin = false;
+        darkBlue = new Color(168, 182, 226);
+        lightBlue = new Color(225, 197, 247);
+        padding = new Color(225, 197, 247);
+        query = null;
+    }
+    
+    public static void main(String[] args){
+    	UI frame = new UI();
+    	frame.start();
+    }
+    
+    /**
+     * Sets up and displays the GUI.
+     */
+    public void start() {
+        
+        centerP = new JPanel();
+        centerP.setBackground(lightBlue);
+        myFrame.add(centerP, BorderLayout.CENTER);
+        setupEast();
+        
+        
+        if(!signedin) //if new user. display joptionpane to sign in
+        {   	
+        	signin(myFrame);
+        	signedin = true;
+        }
+       
+        
+        
+        myFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        myFrame.setSize(INITIAL_SIZE);
+        myFrame.setMinimumSize(MIN_SIZE);
+        myFrame.setLocationRelativeTo(null);
+        myFrame.setVisible(true);
+    }
+
+    /**
+     * Grabs the login information from user.
+     * @param frame is a jframe of our current frame.
+     * @return boolean value 
+     */
+    public boolean signin(JFrame frame){
+    	Hashtable<String, String> logininformation = new Hashtable<String, String>();
+    	boolean val = false;
+        JPanel panel = new JPanel(new BorderLayout(5, 5));
+
+        JPanel label = new JPanel(new GridLayout(0, 1, 2, 2));
+        label.add(new JLabel("E-Mail", SwingConstants.RIGHT));
+        label.add(new JLabel("Password", SwingConstants.RIGHT));
+        panel.add(label, BorderLayout.WEST);
+
+        JPanel controls = new JPanel(new GridLayout(0, 1, 2, 2));
+        JTextField username = new JTextField();
+        controls.add(username);
+        username.setText("kevin@yahoo.com");
+        JPasswordField password = new JPasswordField();
+        controls.add(password);
+        password.setText("hi123");
+        panel.add(controls, BorderLayout.CENTER);
+
+        JOptionPane.showConfirmDialog(
+                frame, panel, "login", JOptionPane.OK_CANCEL_OPTION);
+
+        
+        
+        logininformation.put("user", username.getText());
+        logininformation.put("pass", new String(password.getPassword()));
+        email = username.getText();
+        
+        return val;
+    	
+    }
+    /**
+     * Sets up the JPanel for the EAST region.
+     */
+    private void setupEast() {
+        
+        final JPanel eastPanel = new JPanel();
+        final BoxLayout b = new BoxLayout(eastPanel, BoxLayout.PAGE_AXIS);
+        eastPanel.setLayout(b);
+        eastPanel.setBackground(padding);
+
+        final JPanel innerPanel5 = new JPanel();
+        innerPanel5.setBackground(Color.GRAY);
+        JButton profile = new JButton("My Profile");
+        profile.addActionListener(new ActionListenerProfile());
+        innerPanel5.add(profile);
+        
+        final JPanel innerPanel3 = new JPanel();
+        innerPanel3.setBackground(Color.GRAY);
+        JButton pastOrder = new JButton("Past Order");
+        pastOrder.addActionListener(new ActionListenerPastOrder());
+        innerPanel3.add(pastOrder);
+        
+        final JPanel innerPanel4 = new JPanel();
+        innerPanel4.setBackground(darkBlue);
+        JButton payment = new JButton("Payment");
+        payment.addActionListener(new ActionListenerPayment());
+        innerPanel4.add(payment);
+        
+        
+        //setting up sign in button.
+        final JPanel innerPanel1 = new JPanel();
+        innerPanel1.setBackground(darkBlue);
+        JButton signInOut = new JButton();
+        signInOut.setText("Sign Out");
+        	
+
+        
+        
+        signInOut.addActionListener(new ActionListener() { 
+        	  public void actionPerformed(ActionEvent e) { 
+        		  	System.out.println("button clicked");
+        		  	System.out.println(signedin);
+        		  	if(signedin) //if already signed in
+        		  	{
+        		  		centerP.removeAll();
+        		  	 	myFrame.repaint();
+        		  	 	myFrame.setVisible(true);
+        		  		signedin = false;
+        		  		myFrame = new UI();
+        		  		((UI) myFrame).start();     		  	 	
+        		  	}
+        		  	
+        		  } 
+        		} );       
+        
+        
+        innerPanel1.add(signInOut);
+        
+        final JPanel innerPanel6 = new JPanel();
+        innerPanel6.setBackground(Color.GRAY);
+        JButton order = new JButton("Make an Order!");
+        //once clicked change centerP
+        order.addActionListener(new ActionListenerOrder());
+        innerPanel6.add(order);
+        
+        final JPanel innerPanel2 = new JPanel();
+        innerPanel2.setBackground(darkBlue);
+        JButton menu = new JButton("Menu");
+        menu.addActionListener(new ActionListenerMenu());
+        innerPanel2.add(menu);
+       
+        
+        //adding east panel 
+        eastPanel.add(innerPanel1);
+        eastPanel.add(Box.createVerticalStrut(PADDING));
+
+        eastPanel.add(innerPanel5);
+        eastPanel.add(Box.createVerticalStrut(PADDING));
+        
+        eastPanel.add(innerPanel2);
+        
+        eastPanel.add(Box.createVerticalStrut(PADDING));
+        eastPanel.add(innerPanel3);
+        eastPanel.add(Box.createVerticalStrut(PADDING));
+        eastPanel.add(innerPanel4);
+        eastPanel.add(Box.createVerticalStrut(PADDING));
+        eastPanel.add(innerPanel6);
+        eastPanel.add(Box.createVerticalStrut(PADDING));
+
+        myFrame.add(eastPanel, BorderLayout.EAST);
+
+        
+        myFrame.add(eastPanel, BorderLayout.EAST);
+    }
+
+    /**
+     * Sets up the JPanel for displaying information. 
+     */
+    private void setupCenter(JTable table) {
+        
+        JScrollPane scrollPane = new JScrollPane(table);
+        centerP.add(scrollPane);
+        
+       // centerP.repaint();
+        myFrame.repaint();
+        myFrame.setVisible(true);
+    }
+    
+
+    
+    
+    
+    /**set up for menu. */
+    private void setupMenu(JTable table) {
+    	
+    	JScrollPane scrollPane = new JScrollPane(table);
+        centerP.add(scrollPane);
+        
+        JLabel label = new JLabel("Category");
+        label.setVisible(true);
+        
+        centerP.add(label);
+        String[] choices = {"Sweets", "Meats", "Omega 3", "Calcuim", "Vegetables", "Flavonoid"};
+        final JComboBox<String> cb = new JComboBox<String>(choices);
+        cb.setVisible(true);
+        centerP.add(cb);
+       
+        JButton search = new JButton("Search");
+        search.addActionListener(new ActionListener() { 
+      	  public void actionPerformed(ActionEvent e) { 
+      		  //if clicked grab the choice and send query. 
+      		String ct = String.valueOf(cb.getSelectedItem());
+      		System.out.println("search clicked");
+      		
+      		String mq = "select FoodName as FoodName, FoodDescription as FoodDescription, FoodPrice as FoodPrice, CategoryName as Category "
+					+ "from kevintn.FoodMenu as kf "
+					+ "inner join "
+					+ "kevintn.Category as kc "
+					+ "on  kf.CategoryID = kc.CategoryID "
+					+ "where CategoryName like '%"+ ct+ "'";
+			
+			JTable table = SqlConnection.sendMeQuery(mq);
+			centerP.removeAll();
+			centerP.add(table);
+			JButton back = new JButton("Back to Search");
+	        back.addActionListener(new ActionListenerMenu());
+	        centerP.add(back);
+			myFrame.repaint();
+			myFrame.setVisible(true);
+      		
+  		  		
+  		  } 
+  		} );   
+        
+        
+        centerP.add(search);
+       // centerP.repaint();
+        myFrame.repaint();
+        myFrame.setVisible(true);
+        
+    }
+
+    /**
+     * This class listens to the menu button.
+     * @author Phansa Chaonpoj
+     *
+     */
+    private class ActionListenerMenu implements ActionListener{
+
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			// TODO Auto-generated method stub
+			//write query for this 
+			//query = "Select * from kevintn.FoodMenu";
+			centerP.removeAll();
+			query = "select FoodID, FoodName, FoodDescription, FoodPrice, CategoryName "
+					+ "from kevintn.FoodMenu as kf "
+					+ "inner join "
+					+ "kevintn.Category as kc "
+					+ "on  kf.CategoryID = kc.CategoryID";
+			
+			String allc = "select * from kevintn.Customers";
+			System.out.println("menu cliked");
+			JTable table = SqlConnection.sendMeQuery(query);
+			setupMenu(table);
+			myFrame.setVisible(true);
+			
+		}
+    	
+    }
+    
+    /**
+     * This class listens to the past order button.
+     * @author Phansa Chaonpoj
+     *
+     */
+    private class ActionListenerPastOrder implements ActionListener{
+
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			// TODO Auto-generated method stub
+			//write query for this 
+			centerP.removeAll();
+			String q = "Select distinct ks.OrderID, kf.FoodName, ks.subTotal, ks.Date "
+					+ "from kevintn.SalesOrderCustomer as ks "
+					+ "inner join "
+					+ "kevintn.SalesOrderDetail as kd "
+					+ "on ks.OrderID = kd.OrderID "
+					+ "inner join "
+					+ "kevintn.FoodMenu as kf "
+					+ "inner join "
+					+ "kevintn.Customers as kc "
+					+ "on kc.CustomerID = ks.CustomerID "
+					+ "where kc.EmailAdress = '" + email + "'";
+			
+			System.out.println("past order clicked");
+			JTable table = SqlConnection.sendMeQuery(q);
+			setupCenter(table);
+			myFrame.setVisible(true);
+	
+			
+		}
+    	
+    }
+
+    /**
+     * This class listens to the payment button.
+     * @author Phansa Chaonpoj
+     *
+     */
+    private class ActionListenerPayment implements ActionListener{
+
+  		@Override
+  		public void actionPerformed(ActionEvent e) {
+  			// TODO Auto-generated method stub
+  			//write query for this 
+  			//query = "Select * from kevintn.FoodMenu";
+  			centerP.removeAll();
+  			String payment = "select kp.PaymentID, kp.PaymentType, kp.IsPaid "
+  					+ "from kevintn.Payment as kp "
+  					+ "inner join "
+  					+ "kevintn.SalesOrderCustomer as ko "
+  					+ "on  kp.CustomerID = ko.CustomerID "
+  					+ "inner join "
+					+ "kevintn.Customers as kc "
+					+ "on kc.CustomerID = ko.CustomerID "
+					+ "where kc.EmailAdress like '%" + email + "%'";
+  			
+  			
+  			System.out.println("paymentClicked");
+  			JTable table = SqlConnection.sendMeQuery(payment);
+  			setupCenter(table);
+  			myFrame.setVisible(true);
+  			
+  		}
+      	
+      }
+    
+    /**
+     * The user's information.
+     */
+    private class ActionListenerProfile implements ActionListener {
+
+    	//once clicked list the user's information.
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			// TODO Auto-generated method stub
+			centerP.removeAll();
+			
+			String profile = "select * "
+					+ "from kevintn.Customers "
+					+ "where EmailAdress like '%" + email + "%'";
+			
+			JTable table = SqlConnection.sendMeQuery(profile);
+			setupCenter(table);
+			myFrame.repaint();
+			myFrame.setVisible(true);
+			
+		}
+    	
+    }
+    
+    
+    /**
+     * The order information.
+     */
+    private class ActionListenerOrder implements ActionListener {
+
+        private  Connection conn;
+        private int month;
+        private   int year;
+        private   int day; 
+
+    	//once clicked list the user's information.
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			// TODO Auto-generated method stub
+			centerP.removeAll();
+			JButton order = new JButton("Order");
+			JTextField cusid = new JTextField("ID");
+			JTextField cus2id = new JTextField("OrderID");
+			JLabel hint = new JLabel("Enter your ID");
+			JLabel hint2 = new JLabel("Enter your OrderID");
+			JLabel food = new JLabel("Pick your foodID!");
+			centerP.add(hint);
+			centerP.add(cusid);
+			centerP.add(hint2);
+			centerP.add(cus2id);
+			centerP.add(food);
+			String[] foodid = {"1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12"};
+			final JComboBox<String> cb = new JComboBox<String>(foodid);
+	        cb.setVisible(true);
+	        centerP.add(cb);
+			centerP.add(order); //after click give feedback. send query...
+			order.addActionListener(new ActionListener() { 
+	        	  public void actionPerformed(ActionEvent e) { 
+	        		  	System.out.println("order clicked");
+	        		  	System.out.println(cusid.getText());
+	        		  	String id = String.valueOf(cb.getSelectedItem());
+	        		  	//order id, customerid, subtotal, date, payment id
+	        		  	//insert into SalesOrderCustomer values (1,1,16.74,GEtDate(),1)
+	        		  	
+	        		  	
+	        		  	//Date d = new Date(Calendar.get(Calendar.YEAR),Calendar.get(Calendar.MONTH), Calendar.get(Calendar.DAY)); 
+	        		  	java.util.Date d = null;
+	        		  	
+	        		  	month  = d.getMonth();
+	        		  	year = d.getYear();
+	        		  	day = d.getDate();
+	        		  	
+	        		  	
+	        		  	java.sql.Date d2 = new Date(year, month, day);
+	        		  	q = "insert into SalesOrderCustomer values("
+	        		  			+ cus2id.getText() + "," + cusid.getText() + ", "
+	        		  					+ "12, "+ d2 +"," + cusid.getText() + ")"; 
+	        		  	
+	        		  	System.out.println(q);
+	        		  	//order id, foodid, food price, quantity
+	        		   q2 = "insert into SalesOrderDetail values("
+	        		  			+ cus2id.getText() + ", " + id + ", " + "4"
+	        		  					+ ", 1)";
+	        	
+	        		  //SqlConnection.updateTable(q);
+	        		  //SqlConnection.updateTable(q2);
+	        		  System.out.println("YoUr iTem hAs bEen oRder");
+	        		  	
+	        		  } 
+	        		} );       
+			
+	        
+			String foodmenu = "select FoodID, FoodName, FoodDescription, FoodPrice, CategoryName "
+					+ "from kevintn.FoodMenu as kf "
+					+ "inner join "
+					+ "kevintn.Category as kc "
+					+ "on  kf.CategoryID = kc.CategoryID";
+			
+			JTable table = SqlConnection.sendMeQuery(foodmenu);
+			setupCenter(table);
+			myFrame.repaint();
+			myFrame.setVisible(true);
+			
+		}
+    	
+    }
+}
