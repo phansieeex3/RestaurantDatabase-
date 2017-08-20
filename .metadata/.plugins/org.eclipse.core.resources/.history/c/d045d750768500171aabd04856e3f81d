@@ -148,7 +148,7 @@ public class UI extends JFrame {
         JPanel controls = new JPanel(new GridLayout(0, 1, 2, 2));
         JTextField username = new JTextField();
         controls.add(username);
-        username.setText("phansa@yahoo.com");
+        username.setText("kevin@yahoo.com");
         JPasswordField password = new JPasswordField();
         controls.add(password);
         password.setText("hi123");
